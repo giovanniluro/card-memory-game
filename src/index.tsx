@@ -1,8 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Main from './pages/Main';
+import GlobalStyle from './global';
 
 ReactDOM.render(
-  <div>
-    olá
-  </div>
-  ,document.getElementById('root'));
+  <>
+    <GlobalStyle />
+    <Main />
+  </>
+  , document.getElementById('root'));
