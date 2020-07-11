@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 interface ICarta {
   rotate: string;
   hidde: string;
+  display: string;
 }
 
 export const Container = styled.div`
@@ -16,15 +17,31 @@ export const Carta = styled.div<ICarta>`
   width: 100%;
   position: absolute;
   transform-style: preserve-3d;
-  transition: transform .6s;
+  transition: transform .5s;
 
-  ${props => props.rotate === "true" && css `
+  ${props => props.rotate === 'true' && css `
     transform: rotateY(180deg);
   `}
 
-  ${props => props.hidde === "true" && css `
+  ${props => props.hidde === 'true' && css `
+    animation: vanish .4s forwards; 
+  `}
+
+  ${props => props.display === 'false' && css `
     display: none;
   `}
+
+  @keyframes vanish {
+    from {
+      transform: translateY(0);
+      transform: rotateY(180deg);
+      opacity: 1;
+    } to {
+      transform: rotateY(180deg);
+      transform: translateY(-10px);
+      opacity: 0;
+    }
+  }
 `;
 
 export const Frente = styled.div`

@@ -6,7 +6,7 @@ const Main: React.FC = () => {
 
   return (
     <Container>
-      <Board />
+      <Board numberOfCards={5}/>
     </Container>
   )
 

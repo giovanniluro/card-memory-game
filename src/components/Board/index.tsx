@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from '../../components/Card';
-import { Container } from './style';
+import { Container, Cards, Status } from './style';
 import { uuid } from 'uuidv4';
 
 export interface ICard {
@@ -10,17 +10,23 @@ export interface ICard {
   setHidden?: (hidden: string) => void;
 }
 
-const Board: React.FC = () => {
+interface BoardProps {
+  numberOfCards: number;
+}
+
+const Board: React.FC <BoardProps> = ({ numberOfCards }) => {
 
   const [cards, setCards] = useState<ICard[]>([]);
   const [cardOne, setCardOne] = useState<ICard>({} as ICard);
   const [cardTwo, setCardTwo] = useState<ICard>({} as ICard);
   const [rightMoves, setRightMoves] = useState(0);
+  const [clock, setClock] = useState('0:00');
 
+  //Criando o novo deck
   useEffect(() => {
     const deck: ICard[] = [];
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < numberOfCards; i++) {
       deck.push({
         content: i,
         id: uuid()
@@ -30,23 +36,38 @@ const Board: React.FC = () => {
           id: uuid()
         });
     }
-
+    //deck.sort(() => Math.random() - 0.5);
     setCards(deck);
   }, []);
 
+  //Cronômetro
+  useEffect(() => {
+    setTimeout(() => {
+      const [minutes, seconds] = clock.split(':');
+      let second = Number(seconds) + 1;
+      let minute = Number(minutes);
+      if (second === 60) {
+        second = 0;
+        minute = minute + 1;
+      }
+      if(rightMoves !== numberOfCards) setClock(`${minute}:${('0' + second).slice(-2)}`);
+    }, 1000);
+  }, [clock, rightMoves]);
+
+  //Validando os pares
   useEffect(() => {
     if (Object.entries(cardOne).length !== 0 && Object.entries(cardTwo).length !== 0) {
       if (cardOne.content === cardTwo.content) {
-       setTimeout(() => {
-         console.log('Cartas iguais...!');
-         if( cardOne.setHidden && cardTwo.setHidden ) {
+        setTimeout(() => {
+          console.log('Cartas iguais...!');
+          if (cardOne.setHidden && cardTwo.setHidden) {
+            setRightMoves(rightMoves => rightMoves + 1);
             cardOne.setHidden("true");
             cardTwo.setHidden("true");
             setCardOne({} as ICard);
             setCardTwo({} as ICard);
-            setRightMoves(rightMoves => rightMoves + 1);
-         }
-       }, 1000);
+          }
+        }, 800);
 
       }
       else {
@@ -58,19 +79,25 @@ const Board: React.FC = () => {
             setCardOne({} as ICard);
             setCardTwo({} as ICard);
           }
-        }, 1000);
+        }, 800);
       }
     }
   }, [cardOne, cardTwo]);
 
+  //Contando quantos pares corretos foram encontrados
   useEffect(() => {
-    console.log(rightMoves);
+    if (rightMoves === numberOfCards) console.log("você ganhou");
   }, [rightMoves]);
 
   return (
     <Container>
-      {cards.map(card => <Card key={card.id} content={card.content} id={card.id}
-        cardOne={cardOne} cardTwo={cardTwo} setCardOne={setCardOne} setCardTwo={setCardTwo} />)}
+      <Status>
+        {clock}
+      </Status>
+      <Cards>
+        {cards.map(card => <Card key={card.id} content={card.content} id={card.id}
+          cardOne={cardOne} cardTwo={cardTwo} setCardOne={setCardOne} setCardTwo={setCardTwo} />)}
+      </Cards>
     </Container>
   )
 
