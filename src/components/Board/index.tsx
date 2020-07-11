@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Card from '../../components/Card';
 import { Container, Cards, Status } from './style';
 import { uuid } from 'uuidv4';
+import { IMatch } from '../../pages/Main';
 
 export interface ICard {
   id: string;
@@ -12,14 +13,17 @@ export interface ICard {
 
 interface BoardProps {
   numberOfCards: number;
+  setCurrentMatch: (match: IMatch) => void;
 }
 
-const Board: React.FC <BoardProps> = ({ numberOfCards }) => {
+const Board: React.FC <BoardProps> = ({ numberOfCards, setCurrentMatch }) => {
 
   const [cards, setCards] = useState<ICard[]>([]);
   const [cardOne, setCardOne] = useState<ICard>({} as ICard);
   const [cardTwo, setCardTwo] = useState<ICard>({} as ICard);
   const [rightMoves, setRightMoves] = useState(0);
+  const [totalMoves, setTotalMoves] = useState(0);
+  const [mistakenMoves, setMistakenMoves] = useState(0);
   const [clock, setClock] = useState('0:00');
 
   //Criando o novo deck
@@ -74,6 +78,7 @@ const Board: React.FC <BoardProps> = ({ numberOfCards }) => {
         setTimeout(() => {
           if (cardOne.setRotate && cardTwo.setRotate) {
             console.log('Cartas diferentes...');
+            setMistakenMoves(mistakenMoves => mistakenMoves + 1);
             cardOne.setRotate("false");
             cardTwo.setRotate("false");
             setCardOne({} as ICard);
@@ -81,18 +86,28 @@ const Board: React.FC <BoardProps> = ({ numberOfCards }) => {
           }
         }, 800);
       }
+      setTotalMoves(totalMoves => totalMoves + 1);
     }
   }, [cardOne, cardTwo]);
 
   //Contando quantos pares corretos foram encontrados
   useEffect(() => {
-    if (rightMoves === numberOfCards) console.log("você ganhou");
+    if (rightMoves === numberOfCards) {
+      const matchDetails = {
+        time: clock,
+        totalMoves: totalMoves,
+        mistakenMoves: mistakenMoves
+      }
+      
+      setCurrentMatch(matchDetails);
+    }
   }, [rightMoves]);
 
   return (
     <Container>
       <Status>
-        {clock}
+        <p>{clock}</p>
+        <p>Jogadas: {totalMoves}</p>
       </Status>
       <Cards>
         {cards.map(card => <Card key={card.id} content={card.content} id={card.id}
