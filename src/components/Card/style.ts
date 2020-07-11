@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 
 interface ICarta {
   rotate: string;
+  hidde: string;
 }
 
 export const Container = styled.div`
@@ -19,6 +20,10 @@ export const Carta = styled.div<ICarta>`
 
   ${props => props.rotate === "true" && css `
     transform: rotateY(180deg);
+  `}
+
+  ${props => props.hidde === "true" && css `
+    display: none;
   `}
 `;
 
