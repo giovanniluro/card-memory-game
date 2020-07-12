@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface ClockProps {
   status: "start" | "stop"|"running";
@@ -33,7 +33,7 @@ const Clock: React.FC<ClockProps> = ({ status, setTime }) => {
 
     return () => clearInterval(interval);
 
-  }, [status]);
+  }, [status, clock, setTime]);
 
   return (
     <p>

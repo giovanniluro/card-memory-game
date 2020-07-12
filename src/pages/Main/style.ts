@@ -1,15 +1,33 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const Container = styled.div`
+interface ContainerProps {
+  fade: boolean;
+}
+
+export const Container = styled.div<ContainerProps>`
   display: flex;
   justify-content: center;
   min-height: 100vh;
   padding: 40px;
-  background: #403D39;
+  
+  ${
+    props => props.fade && css`
+      animation: fade 1s forwards;
+    `
+  }
 
   @media(max-width: 730px) {
     padding: 10px;
     flex-direction: column-reverse;
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
   
 `;

@@ -51,8 +51,10 @@ export const Container = styled.div`
     padding: 0;
 
     button {
+      margin-top: 30px;
       font-size: 20px;
       padding: 10px 20px;
+      min-width: 180px;
 
     }
   }

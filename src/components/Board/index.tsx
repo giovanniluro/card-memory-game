@@ -52,7 +52,7 @@ const Board: React.FC<BoardProps> = ({ numberOfCards, setCurrentMatch, restart }
     setMistakenMoves(0);
     setClockStatus('start');
     setCurrentMatch({} as IMatch);
-  }, [restart]);
+  }, [restart, numberOfCards, setCurrentMatch]);
 
   //Validando os pares
   useEffect(() => {
@@ -89,7 +89,7 @@ const Board: React.FC<BoardProps> = ({ numberOfCards, setCurrentMatch, restart }
     if (rightMoves === numberOfCards) {
       setClockStatus(clockStatus => "stop");
     }
-  }, [rightMoves]);
+  }, [rightMoves, numberOfCards]);
 
   //Criando log da partida
   useEffect(() => {
@@ -101,7 +101,7 @@ const Board: React.FC<BoardProps> = ({ numberOfCards, setCurrentMatch, restart }
       }
       setCurrentMatch(matchDetails);
     }
-  }, [clock]);
+  }, [clock, totalMoves, mistakenMoves, setCurrentMatch]);
 
   //Colocando o relógio pra correr, para que saibamos quando ele foi resetado
   useEffect(() => {
@@ -121,8 +121,8 @@ const Board: React.FC<BoardProps> = ({ numberOfCards, setCurrentMatch, restart }
       </Status>
       <Cards>
         {cards.map(card =>
-          <div>
-            <Card key={card.id} content={card.content} id={card.id}
+          <div key={card.id} >
+            <Card content={card.content} id={card.id}
               cardOne={cardOne} cardTwo={cardTwo} setCardOne={setCardOne} setCardTwo={setCardTwo} />
           </div>)}
       </Cards>

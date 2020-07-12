@@ -8,5 +8,9 @@ export default createGlobalStyle`
     margin: 0;
     font-family: 'Oswald', sans-serif;
   }
+  
+  body {
+    background: #403D39;
+  }
 
 `

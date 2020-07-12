@@ -22,9 +22,11 @@ const Main: React.FC = () => {
   const [newRecord, setNewRecord] = useState(false);
   const [difficulty, setDifficulty] = useState('select');
   const [numberOfCards, setNumberOfCards] = useState(0);
+  const [fade, setFade] = useState(false);
 
   const handleDifficultyChange = useCallback((difficulty: string) => {
     setDifficulty(difficulty);
+    setFade(true);
 
     if(difficulty==='Casual') {
       setNumberOfCards(8);
@@ -43,13 +45,16 @@ const Main: React.FC = () => {
 
   }, []);
 
+  //voltando a opção de selecionar dificuldade
   useEffect(() => {
     if(difficulty === 'select'){
+      setFade(true);
       setNumberOfCards(0);
       setRestart(restart => !restart);
     }
   }, [difficulty]);
 
+  //verificando novo recorde
   useEffect(() => {
     if (Object.entries(currentMatch).length > 0) {
       const [bestMinute, bestSecond] = bestMatch.time.split(':');
@@ -62,10 +67,10 @@ const Main: React.FC = () => {
     } else {
       setNewRecord(false);
     }
-  }, [currentMatch]);
+  }, [currentMatch, bestMatch.time]);
 
   return (
-    <Container>
+    <Container fade={fade} onAnimationEnd={() => setFade(false)}>
       <Board numberOfCards={numberOfCards} setCurrentMatch={setCurrentMatch} restart={restart} />
       {difficulty !== 'select' && <ControlPanel setDifficulty={setDifficulty} currentMatch={currentMatch} bestMatch={bestMatch} restart={restart} restartGame={setRestart} newRecord={newRecord} />}
       {difficulty === 'select' && 

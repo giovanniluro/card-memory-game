@@ -13,6 +13,7 @@ export const Container = styled.div`
  `; 
 
 export const Cards = styled.div`
+
   @media(min-width: 1300px) {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
