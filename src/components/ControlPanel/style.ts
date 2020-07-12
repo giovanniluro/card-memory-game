@@ -44,8 +44,11 @@ export const Container = styled.div`
   div[class="buttons"] {
     background: transparent;
     display: flex;
+    width: 100%;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    padding: 0;
 
     button {
       font-size: 20px;

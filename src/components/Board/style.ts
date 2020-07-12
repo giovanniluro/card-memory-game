@@ -37,6 +37,12 @@ export const Cards = styled.div`
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 20px;
   }  
+
+  @media(max-wdth: 480px) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
+  }
 `;
 
 export const Status = styled.div`

@@ -8,7 +8,8 @@ export const Container = styled.div`
   background: #403D39;
 
   @media(max-width: 730px) {
-   flex-direction: column-reverse;
+    padding: 10px;
+    flex-direction: column-reverse;
   }
   
 `;
