@@ -13,3 +13,27 @@ export const Container = styled.div`
   }
   
 `;
+
+export const DifficultySelection = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    margin-top: 40px;
+  }
+
+  button {
+    margin-top: 40px;
+    cursor: pointer;
+    font-size: 22px;
+    padding: 10px 20px;
+    min-width: 150px;
+
+    &:hover {
+      opacity: 0.5s;
+    }
+
+  }
+`;

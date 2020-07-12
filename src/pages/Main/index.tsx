@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Container } from './style';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Container, DifficultySelection } from './style';
 import Board from '../../components/Board';
 import ControlPanel from '../../components/ControlPanel';
 
@@ -20,6 +20,35 @@ const Main: React.FC = () => {
   const [currentMatch, setCurrentMatch] = useState<IMatch>({} as IMatch);
   const [restart, setRestart] = useState(false);
   const [newRecord, setNewRecord] = useState(false);
+  const [difficulty, setDifficulty] = useState('select');
+  const [numberOfCards, setNumberOfCards] = useState(0);
+
+  const handleDifficultyChange = useCallback((difficulty: string) => {
+    setDifficulty(difficulty);
+
+    if(difficulty==='Casual') {
+      setNumberOfCards(8);
+    }
+    else if(difficulty==='Easy') {
+      setNumberOfCards(16);
+    }
+    else if(difficulty==='Medium') {
+      setNumberOfCards(24);
+    }
+    else if(difficulty==='Hard') {
+      setNumberOfCards(32);
+    }
+
+    setRestart(restart => !restart);
+
+  }, []);
+
+  useEffect(() => {
+    if(difficulty === 'select'){
+      setNumberOfCards(0);
+      setRestart(restart => !restart);
+    }
+  }, [difficulty]);
 
   useEffect(() => {
     if (Object.entries(currentMatch).length > 0) {
@@ -37,8 +66,17 @@ const Main: React.FC = () => {
 
   return (
     <Container>
-      <Board numberOfCards={10} setCurrentMatch={setCurrentMatch} restart={restart} />
-      <ControlPanel currentMatch={currentMatch} bestMatch={bestMatch} restart={restart} restartGame={setRestart} newRecord={newRecord} />
+      <Board numberOfCards={numberOfCards} setCurrentMatch={setCurrentMatch} restart={restart} />
+      {difficulty !== 'select' && <ControlPanel setDifficulty={setDifficulty} currentMatch={currentMatch} bestMatch={bestMatch} restart={restart} restartGame={setRestart} newRecord={newRecord} />}
+      {difficulty === 'select' && 
+        <DifficultySelection>
+          <h1>Escolha uma dificuldade</h1>
+          <button onClick={() => handleDifficultyChange('Casual')}>Casual</button>
+          <button onClick={() => handleDifficultyChange('Easy')}>Fácil</button>
+          <button onClick={() => handleDifficultyChange('Medium')}>Médio</button>
+          <button onClick={() => handleDifficultyChange('Hard')}>Difícil</button>
+        </DifficultySelection>
+      }
     </Container>
   )
 

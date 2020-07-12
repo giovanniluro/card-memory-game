@@ -10,9 +10,10 @@ interface ControlPanelProps {
   restart: boolean;
   restartGame: (restart:boolean) => void;
   newRecord: boolean;
+  setDifficulty: (difficulty: string) => void;
 }
 
-const ControlPanel: React.FC<ControlPanelProps> = ({ currentMatch, bestMatch, restart, restartGame,newRecord }) => {
+const ControlPanel: React.FC<ControlPanelProps> = ({ currentMatch, bestMatch, restart, restartGame,newRecord, setDifficulty}) => {
 
   return (
     <Container>
@@ -33,6 +34,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ currentMatch, bestMatch, re
       </div> }
       <div className="buttons">
         <button onClick={() => (restartGame(!restart))}>Recomeçar</button>
+        <button onClick={() => setDifficulty('select')}> Mudar dificuldade </button>
       </div>
     </Container>
   );

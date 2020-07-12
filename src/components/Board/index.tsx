@@ -27,7 +27,7 @@ const Board: React.FC<BoardProps> = ({ numberOfCards, setCurrentMatch, restart }
   const [totalMoves, setTotalMoves] = useState(0);
   const [mistakenMoves, setMistakenMoves] = useState(0);
   const [clock, setClock] = useState('0:00');
-  const [clockStatus, setClockStatus] = useState<'start'|'stop'|'running'>("start");
+  const [clockStatus, setClockStatus] = useState<'start' | 'stop' | 'running'>("start");
 
   //Reiniciando o jogoa
   useEffect(() => {
@@ -50,7 +50,7 @@ const Board: React.FC<BoardProps> = ({ numberOfCards, setCurrentMatch, restart }
     setRightMoves(0);
     setTotalMoves(0);
     setMistakenMoves(0);
-    setClockStatus('start');  
+    setClockStatus('start');
     setCurrentMatch({} as IMatch);
   }, [restart]);
 
@@ -93,18 +93,19 @@ const Board: React.FC<BoardProps> = ({ numberOfCards, setCurrentMatch, restart }
 
   //Criando log da partida
   useEffect(() => {
-    if(clock !== '0:00')
-      {const matchDetails = {
+    if (clock !== '0:00') {
+      const matchDetails = {
         time: clock.toString(),
         totalMoves: totalMoves,
         mistakenMoves: mistakenMoves
       }
-      setCurrentMatch(matchDetails);}
+      setCurrentMatch(matchDetails);
+    }
   }, [clock]);
 
   //Colocando o relógio pra correr, para que saibamos quando ele foi resetado
   useEffect(() => {
-    if(clockStatus === 'start') {
+    if (clockStatus === 'start') {
       setClockStatus('running');
     }
   }, [clockStatus]);
@@ -112,12 +113,18 @@ const Board: React.FC<BoardProps> = ({ numberOfCards, setCurrentMatch, restart }
   return (
     <Container>
       <Status>
-        <Clock setTime={setClock} status={clockStatus} />
-        <p>Jogadas: {totalMoves}</p>
+        {numberOfCards !== 0 &&
+          <>
+            <Clock setTime={setClock} status={clockStatus} />
+            <p>Jogadas: {totalMoves}</p>
+          </>}
       </Status>
       <Cards>
-        {cards.map(card => <Card key={card.id} content={card.content} id={card.id}
-          cardOne={cardOne} cardTwo={cardTwo} setCardOne={setCardOne} setCardTwo={setCardTwo} />)}
+        {cards.map(card =>
+          <div>
+            <Card key={card.id} content={card.content} id={card.id}
+              cardOne={cardOne} cardTwo={cardTwo} setCardOne={setCardOne} setCardTwo={setCardTwo} />
+          </div>)}
       </Cards>
     </Container>
   )

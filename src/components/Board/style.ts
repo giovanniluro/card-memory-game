@@ -5,25 +5,30 @@ export const Container = styled.div`
   padding: 40px;
   border-radius: 12px;
   flex: 1;
+
+  @media(max-width: 830px) {
+    padding: 10px;
+  }
+
  `; 
 
 export const Cards = styled.div`
   @media(min-width: 1300px) {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
-    grid-gap: 20px;
+    grid-gap: 30px;
   }
 
   @media(max-width: 1299px) {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    grid-gap: 20px;
+    grid-gap: 30px;
   }
   
   @media(max-width: 1050px) {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    grid-gap: 20px;
+    grid-gap: 30px;
   }
 
   @media(max-width: 950px) {
@@ -42,6 +47,12 @@ export const Cards = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 20px;
+  }
+
+  > div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 `;
 
