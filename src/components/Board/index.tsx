@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Card from '../../components/Card';
+import Clock from '../Clock';
 import { Container, Cards, Status } from './style';
 import { uuid } from 'uuidv4';
 import { IMatch } from '../../pages/Main';
@@ -14,9 +15,10 @@ export interface ICard {
 interface BoardProps {
   numberOfCards: number;
   setCurrentMatch: (match: IMatch) => void;
+  restart: boolean;
 }
 
-const Board: React.FC <BoardProps> = ({ numberOfCards, setCurrentMatch }) => {
+const Board: React.FC<BoardProps> = ({ numberOfCards, setCurrentMatch, restart }) => {
 
   const [cards, setCards] = useState<ICard[]>([]);
   const [cardOne, setCardOne] = useState<ICard>({} as ICard);
@@ -25,8 +27,9 @@ const Board: React.FC <BoardProps> = ({ numberOfCards, setCurrentMatch }) => {
   const [totalMoves, setTotalMoves] = useState(0);
   const [mistakenMoves, setMistakenMoves] = useState(0);
   const [clock, setClock] = useState('0:00');
+  const [clockStatus, setClockStatus] = useState<'start'|'stop'|'running'>("start");
 
-  //Criando o novo deck
+  //Reiniciando o jogoa
   useEffect(() => {
     const deck: ICard[] = [];
 
@@ -40,30 +43,22 @@ const Board: React.FC <BoardProps> = ({ numberOfCards, setCurrentMatch }) => {
           id: uuid()
         });
     }
-    //deck.sort(() => Math.random() - 0.5);
+    deck.sort(() => Math.random() - 0.5);
     setCards(deck);
-  }, []);
-
-  //Cronômetro
-  useEffect(() => {
-    setTimeout(() => {
-      const [minutes, seconds] = clock.split(':');
-      let second = Number(seconds) + 1;
-      let minute = Number(minutes);
-      if (second === 60) {
-        second = 0;
-        minute = minute + 1;
-      }
-      if(rightMoves !== numberOfCards) setClock(`${minute}:${('0' + second).slice(-2)}`);
-    }, 1000);
-  }, [clock, rightMoves]);
+    setCardOne({} as ICard);
+    setCardTwo({} as ICard);
+    setRightMoves(0);
+    setTotalMoves(0);
+    setMistakenMoves(0);
+    setClockStatus('start');  
+    setCurrentMatch({} as IMatch);
+  }, [restart]);
 
   //Validando os pares
   useEffect(() => {
     if (Object.entries(cardOne).length !== 0 && Object.entries(cardTwo).length !== 0) {
       if (cardOne.content === cardTwo.content) {
         setTimeout(() => {
-          console.log('Cartas iguais...!');
           if (cardOne.setHidden && cardTwo.setHidden) {
             setRightMoves(rightMoves => rightMoves + 1);
             cardOne.setHidden("true");
@@ -77,7 +72,6 @@ const Board: React.FC <BoardProps> = ({ numberOfCards, setCurrentMatch }) => {
       else {
         setTimeout(() => {
           if (cardOne.setRotate && cardTwo.setRotate) {
-            console.log('Cartas diferentes...');
             setMistakenMoves(mistakenMoves => mistakenMoves + 1);
             cardOne.setRotate("false");
             cardTwo.setRotate("false");
@@ -93,20 +87,32 @@ const Board: React.FC <BoardProps> = ({ numberOfCards, setCurrentMatch }) => {
   //Contando quantos pares corretos foram encontrados
   useEffect(() => {
     if (rightMoves === numberOfCards) {
-      const matchDetails = {
-        time: clock,
+      setClockStatus(clockStatus => "stop");
+    }
+  }, [rightMoves]);
+
+  //Criando log da partida
+  useEffect(() => {
+    if(clock !== '0:00')
+      {const matchDetails = {
+        time: clock.toString(),
         totalMoves: totalMoves,
         mistakenMoves: mistakenMoves
       }
-      
-      setCurrentMatch(matchDetails);
+      setCurrentMatch(matchDetails);}
+  }, [clock]);
+
+  //Colocando o relógio pra correr, para que saibamos quando ele foi resetado
+  useEffect(() => {
+    if(clockStatus === 'start') {
+      setClockStatus('running');
     }
-  }, [rightMoves]);
+  }, [clockStatus]);
 
   return (
     <Container>
       <Status>
-        <p>{clock}</p>
+        <Clock setTime={setClock} status={clockStatus} />
         <p>Jogadas: {totalMoves}</p>
       </Status>
       <Cards>

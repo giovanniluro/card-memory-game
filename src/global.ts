@@ -9,9 +9,4 @@ export default createGlobalStyle`
     font-family: 'Oswald', sans-serif;
   }
 
-  body {
-    margin: 40px;
-    background: #252422;
-  }
-
 `

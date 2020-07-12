@@ -38,7 +38,7 @@ export const Carta = styled.div<ICarta>`
       opacity: 1;
     } to {
       transform: rotateY(180deg);
-      transform: translateY(-10px);
+      transform: translateY(-20px);
       opacity: 0;
     }
   }

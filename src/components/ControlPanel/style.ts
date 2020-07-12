@@ -4,7 +4,9 @@ export const Container = styled.div`
 
   display: flex;
   flex-direction: column;
+  align-items: center;
   margin-left: 40px;
+  flex: 1;
 
   div {
 
@@ -39,4 +41,24 @@ export const Container = styled.div`
 
   }
 
+  div[class="buttons"] {
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    button {
+      font-size: 20px;
+      padding: 10px 20px;
+
+    }
+  }
+
+  @media(max-width: 730px) {
+    margin: 0;
+
+    button {
+      margin-bottom: 20px;
+    }
+  }
 `;
