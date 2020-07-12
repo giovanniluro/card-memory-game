@@ -55,15 +55,16 @@ export const Container = styled.div`
       font-size: 20px;
       padding: 10px 20px;
       min-width: 180px;
-
     }
   }
 
   @media(max-width: 730px) {
     margin: 0;
+    margin-bottom: 40px;
 
-    button {
-      margin-bottom: 20px;
+    div[class="buttons"] { 
+      flex-direction: row;
+      justify-content: space-evenly;
     }
   }
 `;

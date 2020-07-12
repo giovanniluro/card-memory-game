@@ -94,14 +94,18 @@ const Board: React.FC<BoardProps> = ({ numberOfCards, setCurrentMatch, restart }
   //Criando log da partida
   useEffect(() => {
     if (clock !== '0:00') {
+      const [minute, second] = clock.split(':');
+      let score = 50*numberOfCards - 3*mistakenMoves - 2*(Number(minute+second)) - totalMoves;
+      if(score < 0) score = 50;
       const matchDetails = {
+        score: score,
         time: clock.toString(),
         totalMoves: totalMoves,
         mistakenMoves: mistakenMoves
       }
       setCurrentMatch(matchDetails);
     }
-  }, [clock, totalMoves, mistakenMoves, setCurrentMatch]);
+  }, [clock, totalMoves, numberOfCards, mistakenMoves, setCurrentMatch]);
 
   //Colocando o relógio pra correr, para que saibamos quando ele foi resetado
   useEffect(() => {

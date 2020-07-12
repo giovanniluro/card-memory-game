@@ -11,14 +11,16 @@ interface ControlPanelProps {
   restartGame: (restart:boolean) => void;
   newRecord: boolean;
   setDifficulty: (difficulty: string) => void;
+  setFade:(fade: boolean) => void;
 }
 
-const ControlPanel: React.FC<ControlPanelProps> = ({ currentMatch, bestMatch, restart, restartGame,newRecord, setDifficulty}) => {
+const ControlPanel: React.FC<ControlPanelProps> = ({ setFade, currentMatch, bestMatch, restart, restartGame,newRecord, setDifficulty}) => {
 
   return (
     <Container>
       <div className="bestMatch">
         <h1>Melhor Partida:</h1>
+        <p>Fez <span>{bestMatch.score}</span> pontos!</p>
         <p>Tempo que demorou: <span>{bestMatch.time}</span></p>
         <p>Fez <span>{bestMatch.totalMoves}</span> jogadas</p>
         <p>Errou de pares <span>{bestMatch.mistakenMoves}</span> vezes</p>
@@ -27,6 +29,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ currentMatch, bestMatch, re
       {Object.entries(currentMatch).length > 0 && 
       <div className="currentMatch">
         <h1>Dados da partida:</h1>
+        <p>Fez <span>{currentMatch.score}</span> pontos!</p>
         <p>Tempo que demorou: <span>{currentMatch.time}</span></p>
         <p>Fez <span>{currentMatch.totalMoves}</span> jogadas</p>
         <p>Errou de pares <span>{currentMatch.mistakenMoves}</span> vezes</p>
@@ -34,7 +37,10 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ currentMatch, bestMatch, re
       </div> }
       <div className="buttons">
         <button onClick={() => (restartGame(!restart))}>Recomeçar</button>
-        <button onClick={() => setDifficulty('select')}> Mudar dificuldade </button>
+        <button onClick={() => {
+          setFade(true);
+          setDifficulty('select');
+        }}> Mudar dificuldade </button>
       </div>
     </Container>
   );

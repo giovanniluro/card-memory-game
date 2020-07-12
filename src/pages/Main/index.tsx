@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Container, DifficultySelection } from './style';
+import { Container, DifficultySelection, Header } from './style';
 import Board from '../../components/Board';
 import ControlPanel from '../../components/ControlPanel';
 
 export interface IMatch {
+  score: number;
   time: string;
   totalMoves: number;
   mistakenMoves: number;
@@ -12,6 +13,7 @@ export interface IMatch {
 const Main: React.FC = () => {
 
   const [bestMatch, setBestMatch] = useState<IMatch>({
+    score: 73,
     time: '1:55',
     totalMoves: 42,
     mistakenMoves: 23
@@ -24,20 +26,22 @@ const Main: React.FC = () => {
   const [numberOfCards, setNumberOfCards] = useState(0);
   const [fade, setFade] = useState(false);
 
+
+  //Setando dificuldade do jogo! 
   const handleDifficultyChange = useCallback((difficulty: string) => {
     setDifficulty(difficulty);
     setFade(true);
 
-    if(difficulty==='Casual') {
+    if (difficulty === 'Casual') {
       setNumberOfCards(8);
     }
-    else if(difficulty==='Easy') {
+    else if (difficulty === 'Easy') {
       setNumberOfCards(16);
     }
-    else if(difficulty==='Medium') {
+    else if (difficulty === 'Medium') {
       setNumberOfCards(24);
     }
-    else if(difficulty==='Hard') {
+    else if (difficulty === 'Hard') {
       setNumberOfCards(32);
     }
 
@@ -47,44 +51,46 @@ const Main: React.FC = () => {
 
   //voltando a opção de selecionar dificuldade
   useEffect(() => {
-    if(difficulty === 'select'){
-      setFade(true);
+    if (difficulty === 'select') {
       setNumberOfCards(0);
-      setRestart(restart => !restart);
     }
   }, [difficulty]);
 
   //verificando novo recorde
   useEffect(() => {
     if (Object.entries(currentMatch).length > 0) {
-      const [bestMinute, bestSecond] = bestMatch.time.split(':');
-      const [currentMinute, currentSecond] = currentMatch.time.split(':');
-
-      if (Number(currentMinute) <= Number(bestMinute) && Number(currentSecond) < Number(bestSecond)) {
+      if (currentMatch.score > bestMatch.score) {
+        console.log("rc");
         setBestMatch(currentMatch);
+        console.log('tesouro');
         setNewRecord(true);
       }
     } else {
       setNewRecord(false);
     }
-  }, [currentMatch, bestMatch.time]);
+  }, [currentMatch, bestMatch.score]);
 
   return (
-    <Container fade={fade} onAnimationEnd={() => setFade(false)}>
-      <Board numberOfCards={numberOfCards} setCurrentMatch={setCurrentMatch} restart={restart} />
-      {difficulty !== 'select' && <ControlPanel setDifficulty={setDifficulty} currentMatch={currentMatch} bestMatch={bestMatch} restart={restart} restartGame={setRestart} newRecord={newRecord} />}
-      {difficulty === 'select' && 
-        <DifficultySelection>
-          <h1>Escolha uma dificuldade</h1>
-          <button onClick={() => handleDifficultyChange('Casual')}>Casual</button>
-          <button onClick={() => handleDifficultyChange('Easy')}>Fácil</button>
-          <button onClick={() => handleDifficultyChange('Medium')}>Médio</button>
-          <button onClick={() => handleDifficultyChange('Hard')}>Difícil</button>
-        </DifficultySelection>
-      }
-    </Container>
-  )
-
+    <>
+      <Header>
+        <h1>CMG - Card Memory Game</h1>
+        <span><h1>Giovanni F. Luro</h1></span>
+      </Header>
+      <Container fade={fade} onAnimationEnd={() => setFade(false)}>
+        {numberOfCards !== 0 && <Board numberOfCards={numberOfCards} setCurrentMatch={setCurrentMatch} restart={restart} />}
+        {difficulty !== 'select' && <ControlPanel setFade={setFade} setDifficulty={setDifficulty} currentMatch={currentMatch} bestMatch={bestMatch} restart={restart} restartGame={setRestart} newRecord={newRecord} />}
+        {difficulty === 'select' &&
+          <DifficultySelection>
+            <h1>Escolha uma dificuldade</h1>
+            <button onClick={() => handleDifficultyChange('Casual')}>Casual</button>
+            <button onClick={() => handleDifficultyChange('Easy')}>Fácil</button>
+            <button onClick={() => handleDifficultyChange('Medium')}>Médio</button>
+            <button onClick={() => handleDifficultyChange('Hard')}>Difícil</button>
+          </DifficultySelection>
+        }
+      </Container>
+    </>
+  );
 }
 
 export default Main;
